@@ -36,13 +36,14 @@ bool processKey();			//키를 눌렀을 때 동작을 정의한다.
 int getAround(int x, int y, int b, int r);	//벽돌의 주변을 점검하여 빈공간이 있는지 체크한다.
 void testFull();			//게임판이 벽돌로 다 찼는지 체크한다.
 void bagbag();				//중복없이 7가방 뽑기
-void printNext(bool Show);
+void nextPrint();
 int bag[7] = { 0,0,0,0,0,0,0 };
 int bagNum = 0;
 int bagMino = 0;
 int first_next = 0;
 int next[5];
 int nextMino = 0;
+int a = 0;
 
 /* 구조체 */
 typedef struct point
@@ -99,7 +100,7 @@ int rot; //이동중인 벽돌의 회전 모양 번호
 
 
 /* main함수 */
-int main(){
+int main() {
 
 	int nFrame, nStay; //벽돌이 내려가는 속도
 	int x, y;
@@ -123,12 +124,12 @@ int main(){
 	nFrame = 10; //벽돌이 떨어지는 속도변수
 
 
-	while (1){
+	while (1) {
 
 		nx = BW / 2; //벽돌의 초기 X좌표
 		ny = 2; //벽돌의 초기 Y좌표
 		rot = 0; //벽돌의 초기 회전모양 번호
-		
+
 		if (first_next == 0) {
 			for (int i = 0; i < 5; i++)
 				bagbag();
@@ -136,6 +137,7 @@ int main(){
 		}
 
 		bagbag();
+		nextPrint();
 
 		/*게임 끝 점검*/
 		if (getAround(nx, ny, brick, rot) != EMPTY) //벽돌 주변이 비었는지 체크
@@ -158,6 +160,7 @@ int main(){
 			delay(1000 / 20);  //0.05초씩 지연 (1000=1초)
 		}
 	}
+	
 	/*게임 끝 처리*/
 	clearScreen();
 	gotoXY(30, 12);
@@ -165,7 +168,6 @@ int main(){
 	setCursorType(NORMALCURSOR);
 
 }
-
 
 /**
 * @brief drawScreen 게임의 배경인 게임판을 그린다.
@@ -193,6 +195,9 @@ void drawScreen()
 
 	gotoXY(50, 6);
 	puts("공백:전부 내림");
+
+	gotoXY(50, 30);
+
 
 }
 
@@ -233,13 +238,7 @@ void printBrick(bool Show)
 
 }
 
-void printNext(bool Show,int next) {
-	for (int i = 0; i < 4; i++)
-	{
-		gotoXY(BX + (shape[next][rot][i].x + nx) * 2, BY + shape[next][rot][i].y + ny);
-		puts(arTile[Show ? BRICK : EMPTY]);
-	}
-}
+
 
 
 /**
@@ -428,7 +427,7 @@ void bagbag() {
 			if (nextMino < 5) {
 				next[nextMino] = tmp;
 				nextMino++;
-				printNext()
+				
 				bag[tmp]++;
 				bagMino++;
 				break;
@@ -450,8 +449,32 @@ void bagbag() {
 				for (int i = 0; i < 7; i++) 
 					bag[i] = 0; // bag 배열 초기화
 				bagMino = 0;
-			}
+			}	
 			break;
 		}
 	}
+		
+}
+//void nextPrint() {
+//	for (int i = 0; i < 5; i++) {
+//		printf(shape[brick[i]][0][].x);
+//		printf(shape[brick[i]][0][].y);
+//	}
+//}
+
+void nextPrint()
+{
+	for (int i = 0; i < 5; i++) {
+		switch (next[i]){
+			case 0 : gotoXY(50 + i * 2, 1); printf("I"); break;
+			case 1 : gotoXY(50 + i * 2, 1); printf("O"); break;
+			case 2 : gotoXY(50 + i * 2, 1); printf("S"); break;
+			case 3 : gotoXY(50 + i * 2, 1); printf("Z"); break;
+			case 4 : gotoXY(50 + i * 2, 1); printf("J"); break;
+			case 5 : gotoXY(50 + i * 2, 1); printf("L"); break;
+			case 6 : gotoXY(50 + i * 2, 1); printf("T"); break;
+		}
+
+	}
+	
 }
