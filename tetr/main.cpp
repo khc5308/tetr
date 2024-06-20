@@ -43,7 +43,8 @@ int bagMino = 0;
 int first_next = 0;
 int next[5];
 int nextMino = 0;
-int a = 0;
+int line = 0;
+int line_select;
 
 /* 구조체 */
 typedef struct point
@@ -109,7 +110,12 @@ int main() {
 	setCursorType(NOCURSOR); //커서 숨김
 	srand((unsigned)time(NULL)); //난수생성기 초기화
 	clearScreen(); //화면 삭제
-
+	gotoXY(0, 0);
+	printf(" 지울 줄 수를 입력하세요 : ");
+	scanf("%d", &line_select);
+	delay(1000);
+	gotoXY(0, 0);
+	printf("                                             ");
 	//보드 배열의 바깥쪽을 벽으로 초기화
 	for (x = 0; x < BW + 2; x++)
 	{
@@ -121,10 +127,19 @@ int main() {
 
 	drawScreen(); //화면 전체 그리기
 
-	nFrame = 10; //벽돌이 떨어지는 속도변수
-
+	nFrame = 20; //벽돌이 떨어지는 속도변수
+	gotoXY(50, 20);
+	printf("%d / %d", line, line_select);
 
 	while (1) {
+		if (line >= line_select) {
+			clearScreen();
+			gotoXY(30, 12);
+			puts("F Id N S H");
+			setCursorType(NORMALCURSOR);
+			delay(1000);
+			return 0;
+		}
 
 		nx = BW / 2; //벽돌의 초기 X좌표
 		ny = 2; //벽돌의 초기 Y좌표
@@ -405,6 +420,9 @@ void testFull()
 		//한줄이 모두 벽돌일 경우, 삭제할 줄 윗줄부터 한칸씩 아래로 복사한다.
 		if (x == BW + 1)
 		{
+			line++;
+			gotoXY(50, 20);
+			printf("%d / %d", line, line_select);
 			for (ty = y; ty > 1; ty--)
 			{
 				for (x = 1; x < BW + 1; x++)
@@ -474,7 +492,5 @@ void nextPrint()
 			case 5 : gotoXY(50 + i * 2, 1); printf("L"); break;
 			case 6 : gotoXY(50 + i * 2, 1); printf("T"); break;
 		}
-
 	}
-	
 }
